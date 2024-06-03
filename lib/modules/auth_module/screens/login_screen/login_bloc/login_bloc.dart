@@ -22,11 +22,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       try {
         // Simulate a login process (e.g., make an API call)
-        await authDatasource.login(
+        final response = await authDatasource.login(
             LoginBody(username: event.username, password: event.password));
 
         emit(LoginSuccess());
-        sessionBloc.add(SetSession());
+        sessionBloc.add(SetSession(token: response.data['token']));
       } catch (error) {
         emit(LoginFailure(error: error.toString()));
       }

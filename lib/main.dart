@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:login_app/infrastructure/blocs/session_bloc/session_bloc.dart';
 import 'package:login_app/infrastructure/blocs/session_bloc/session_event.dart';
 import 'package:login_app/router/app_router.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(

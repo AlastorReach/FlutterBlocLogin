@@ -9,4 +9,8 @@ abstract class SessionEvent extends Equatable {
 
 class CheckSession extends SessionEvent {}
 
-class SetSession extends SessionEvent {}
+class SetSession extends SessionEvent {
+  final String token;
+
+  const SetSession({required this.token});
+}
