@@ -17,7 +17,7 @@ class AppRouter extends StatelessWidget {
         final initialRoute = GoRoute(
             path: '/',
             redirect: (_, __) =>
-                state == SessionLoggedIn() ? '/browse' : '/auth');
+                state == SessionLoggedIn() ? '/session' : '/auth');
 
         final router = GoRouter(
           initialLocation: '/',

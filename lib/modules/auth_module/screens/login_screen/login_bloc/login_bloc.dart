@@ -1,22 +1,34 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_app/domain/datasources/auth_datasource.dart';
+import 'package:login_app/domain/models/login_body.dart';
+import 'package:login_app/infrastructure/blocs/session_bloc/session_bloc.dart';
+import 'package:login_app/infrastructure/blocs/session_bloc/session_event.dart';
+import 'package:login_app/infrastructure/datasources/auth_datasource.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial());
+  late final SessionBloc sessionBloc;
+  late final AuthDatasource authDatasource;
+  LoginBloc(SessionBloc sessionB) : super(LoginInitial()) {
+    sessionBloc = sessionB;
+    authDatasource = AuthDatasourceImp();
+    on<LoginButtonPressed>(_handleLogin);
+  }
 
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
+  void _handleLogin(LoginEvent event, Emitter<LoginState> emit) async {
     if (event is LoginButtonPressed) {
-      yield LoginLoading();
+      emit(LoginLoading());
 
       try {
         // Simulate a login process (e.g., make an API call)
-        await Future.delayed(Duration(seconds: 2));
+        await authDatasource.login(
+            LoginBody(username: event.username, password: event.password));
 
-        // Assume login is successful
-        yield LoginSuccess();
+        emit(LoginSuccess());
+        sessionBloc.add(SetSession());
       } catch (error) {
-        yield LoginFailure(error: error.toString());
+        emit(LoginFailure(error: error.toString()));
       }
     }
   }

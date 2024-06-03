@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:login_app/infrastructure/blocs/session_bloc/session_bloc.dart';
 import 'package:login_app/modules/auth_module/screens/login_screen/login_bloc/login_bloc.dart';
 import 'package:login_app/modules/auth_module/screens/login_screen/login_bloc/login_event.dart';
 import 'package:login_app/modules/auth_module/screens/login_screen/login_bloc/login_state.dart';
@@ -16,7 +17,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginBloc(),
+      create: (context) => LoginBloc(context.read<SessionBloc>()),
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();

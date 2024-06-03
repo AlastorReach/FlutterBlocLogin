@@ -5,6 +5,7 @@ import 'package:login_app/infrastructure/blocs/session_bloc/session_state.dart';
 class SessionBloc extends Bloc<SessionEvent, SessionState> {
   SessionBloc() : super(SessionInitial()) {
     on<CheckSession>(_onCheckSession);
+    on<SetSession>(_onSetSession);
   }
 
   void _onCheckSession(CheckSession event, Emitter<SessionState> emit) async {
@@ -18,7 +19,11 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   }
 
   Future<bool> checkIfLoggedIn() async {
-    // Your logic to check if the user is logged in
+    await Future.delayed(const Duration(milliseconds: 1000));
     return false;
+  }
+
+  void _onSetSession(SetSession event, Emitter<SessionState> emit) async {
+    emit(SessionLoggedIn());
   }
 }

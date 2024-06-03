@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'token_manager.dart';
 
@@ -21,6 +23,7 @@ class ResponseInterceptor extends Interceptor {
   Future<void> onError(
       DioException err, ErrorInterceptorHandler handler) async {
     // Check if the error is due to token expiration
+    inspect(err);
     if (err.response?.statusCode == 401) {
       // Attempt to refresh the token
       final refreshToken = await tokenManager.getRefreshToken();

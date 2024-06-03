@@ -8,3 +8,5 @@ abstract class SessionEvent extends Equatable {
 }
 
 class CheckSession extends SessionEvent {}
+
+class SetSession extends SessionEvent {}

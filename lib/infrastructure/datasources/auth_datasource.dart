@@ -1,32 +1,36 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:login_app/domain/datasources/auth_datasource.dart';
+import 'package:login_app/domain/models/login_body.dart';
+import 'package:login_app/domain/models/signup_body.dart';
+import 'package:login_app/infrastructure/constants/env.dart';
 import 'package:login_app/infrastructure/http/dio_client.dart';
-import 'package:login_app/infrastructure/http/token_manager.dart';
 
 class AuthDatasourceImp extends AuthDatasource {
-  final tokenManager = TokenManager();
-  final dioClient = DioClient(
-    BaseOptions(
-      baseUrl: 'https://your-api.com',
-      connectTimeout: const Duration(milliseconds: 5000),
-      receiveTimeout: const Duration(milliseconds: 3000),
-    ),
-  );
-  @override
-  Future<void> login() {
-    // TODO: implement login
-    throw UnimplementedError();
+  late final DioClient dio;
+  AuthDatasourceImp() {
+    String baseUrl = dotenv.env[LOGIN_API_BASE_URL] ?? "";
+    dio = DioClient(
+      BaseOptions(
+        baseUrl: baseUrl,
+        connectTimeout: const Duration(milliseconds: 5000),
+        receiveTimeout: const Duration(milliseconds: 3000),
+      ),
+    );
   }
 
   @override
-  Future<void> recoverPassword() {
-    // TODO: implement recoverPassword
-    throw UnimplementedError();
+  Future<Response<dynamic>> login(LoginBody body) async {
+    return await dio.client.post('/api/auth/login', data: body.toJson());
   }
 
   @override
-  Future<void> register() {
-    // TODO: implement register
-    throw UnimplementedError();
+  Future<Response<dynamic>> recoverPassword() async {
+    return await dio.client.post('/recover-password');
+  }
+
+  @override
+  Future<Response<dynamic>> register(SignUpBody body) async {
+    return await dio.client.post('/api/auth/signup', data: body);
   }
 }
